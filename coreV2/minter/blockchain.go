@@ -700,6 +700,10 @@ func (blockchain *Blockchain) Commit() abciTypes.ResponseCommit {
 		go blockchain.snapshot(int64(height))
 	}
 
+	select {
+	case <-context.Background().Done():
+	}
+
 	return abciTypes.ResponseCommit{
 		Data:         hash,
 		RetainHeight: 0,
