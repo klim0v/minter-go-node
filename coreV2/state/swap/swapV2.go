@@ -482,19 +482,19 @@ func (s *SwapV2) Commit(db *iavl.MutableTree, version int64) error {
 			db.Set(pathOrderID, pairOrderBytes)
 		}
 
-		lenB := len(pair.buyOrders.ids)
-		pair.loadedBuyOrders.ids = pair.buyOrders.ids[:lenB:lenB]
-		if lenB > 10000 {
-			pair.buyOrders.ids = pair.buyOrders.ids[:10000:10000]
-		}
-		//pair.buyOrders.ids = nil
+		//lenB := len(pair.buyOrders.ids)
+		//pair.loadedBuyOrders.ids = pair.buyOrders.ids[:lenB:lenB]
+		//if lenB > 10000 {
+		//	pair.buyOrders.ids = pair.buyOrders.ids[:10000:10000]
+		//}
+		pair.buyOrders.ids = nil
 
-		lenS := len(pair.sellOrders.ids)
-		pair.loadedSellOrders.ids = pair.sellOrders.ids[:lenS:lenS]
-		if lenS > 10000 {
-			pair.sellOrders.ids = pair.sellOrders.ids[:10000:10000]
-		}
-		//pair.sellOrders.ids = nil
+		//lenS := len(pair.sellOrders.ids)
+		//pair.loadedSellOrders.ids = pair.sellOrders.ids[:lenS:lenS]
+		//if lenS > 10000 {
+		//	pair.sellOrders.ids = pair.sellOrders.ids[:10000:10000]
+		//}
+		pair.sellOrders.ids = nil
 
 		pair.dirtyOrders.mu.Lock()
 		pair.dirtyOrders.list = make(map[uint32]struct{})
