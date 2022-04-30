@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/MinterTeam/minter-go-node/coreV2/events"
+	"log"
 	"math"
 	"math/big"
 	"sort"
@@ -487,13 +488,22 @@ func (s *SwapV2) Commit(db *iavl.MutableTree, version int64) error {
 		//if lenB > 10000 {
 		//	pair.buyOrders.ids = pair.buyOrders.ids[:10000:10000]
 		//}
-		pair.buyOrders.ids = nil
 
 		//lenS := len(pair.sellOrders.ids)
 		//pair.loadedSellOrders.ids = pair.sellOrders.ids[:lenS:lenS]
 		//if lenS > 10000 {
 		//	pair.sellOrders.ids = pair.sellOrders.ids[:10000:10000]
 		//}
+
+		log.Println("pair.GetPairKey()", pair.GetPairKey())
+
+		log.Println("pair.loadedBuyOrders.ids", pair.loadedBuyOrders.ids)
+		pair.loadedBuyOrders.ids = nil
+		log.Println("pair.buyOrders.ids", pair.buyOrders.ids)
+		pair.buyOrders.ids = nil
+		log.Println("pair.loadedSellOrders.ids", pair.loadedSellOrders.ids)
+		pair.loadedSellOrders.ids = nil
+		log.Println("pair.loadedSellOrders.ids", pair.sellOrders.ids)
 		pair.sellOrders.ids = nil
 
 		pair.dirtyOrders.mu.Lock()
