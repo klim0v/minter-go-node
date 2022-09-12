@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
+	"log"
 	"sort"
 	"strings"
 
@@ -464,8 +465,31 @@ func (s *Service) BestTrade(ctx context.Context, req *pb.BestTradeRequest) (*pb.
 	} else {
 		route.Result = trade.InputAmount.Amount.String()
 	}
+	var dupC bool
+	c := map[types.CoinID]struct{}{}
 	for _, token := range trade.Route.Path {
 		route.Path = append(route.Path, uint64(token))
+		if _, ok := c[token]; ok {
+			dupC = true
+		}
+		c[token] = struct{}{}
+	}
+	if dupC {
+		log.Println("bug dup coins", req.BuyCoin, req.SellCoin, req.Amount, req.Type.String(), route.Path)
+	}
+
+	var dupP bool
+	r := map[uint32]struct{}{}
+	var pairs []uint32
+	for _, pair := range trade.Route.Pairs {
+		pairs = append(pairs, pair.GetID())
+		if _, ok := r[pair.GetID()]; ok {
+			dupP = true
+		}
+		r[pair.GetID()] = struct{}{}
+	}
+	if dupP {
+		log.Println("bug dup pairs", req.BuyCoin, req.SellCoin, req.Amount, req.Type.String(), pairs)
 	}
 
 	return route, nil
