@@ -466,13 +466,13 @@ func (s *Service) BestTrade(ctx context.Context, req *pb.BestTradeRequest) (*pb.
 		route.Result = trade.InputAmount.Amount.String()
 	}
 	var dupC bool
-	c := map[types.CoinID]struct{}{}
+	c := -1
 	for _, token := range trade.Route.Path {
 		route.Path = append(route.Path, uint64(token))
-		if _, ok := c[token]; ok {
+		if c == int(token) {
 			dupC = true
 		}
-		c[token] = struct{}{}
+		c = int(token)
 	}
 	if dupC {
 		log.Println("bug dup coins", req.BuyCoin, req.SellCoin, req.Amount, req.Type.String(), route.Path)
