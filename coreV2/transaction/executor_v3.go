@@ -8,12 +8,11 @@ import (
 	"sync"
 
 	"github.com/MinterTeam/minter-go-node/coreV2/check"
-	"github.com/MinterTeam/minter-go-node/coreV2/state/swap"
-	abcTypes "github.com/tendermint/tendermint/abci/types"
-
 	"github.com/MinterTeam/minter-go-node/coreV2/code"
 	"github.com/MinterTeam/minter-go-node/coreV2/state"
+	"github.com/MinterTeam/minter-go-node/coreV2/state/swap"
 	"github.com/MinterTeam/minter-go-node/coreV2/types"
+	abcTypes "github.com/tendermint/tendermint/abci/types"
 )
 
 type ExecutorV3 struct {
@@ -363,6 +362,13 @@ func (e *ExecutorV3) RunTx(context state.Interface, rawTx []byte, rewardPool *bi
 	response.GasUsed = tx.Gas()
 	response.GasWanted = response.GasUsed
 	response.GasPrice = tx.GasPrice
+
+	if currentBlock > 13748180 {
+		fmt.Printf("%#v", response)
+		for _, tag := range response.Tags {
+			fmt.Print(tag.String())
+		}
+	}
 
 	return response
 }

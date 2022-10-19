@@ -671,6 +671,10 @@ func (blockchain *Blockchain) Commit() abciTypes.ResponseCommit {
 	}
 	height := blockchain.Height()
 
+	if height > 13748189 {
+		os.Exit(int(height))
+	}
+
 	if err := blockchain.stateDeliver.Check(); err != nil {
 		panic(errors.Wrap(err, fmt.Sprintf("height %d", height)))
 	}

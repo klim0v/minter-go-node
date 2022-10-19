@@ -1,10 +1,11 @@
 package swap
 
 import (
-	eventsdb "github.com/MinterTeam/minter-go-node/coreV2/events"
-	"github.com/MinterTeam/minter-go-node/coreV2/state/accounts"
 	"math/big"
 	"testing"
+
+	eventsdb "github.com/MinterTeam/minter-go-node/coreV2/events"
+	"github.com/MinterTeam/minter-go-node/coreV2/state/accounts"
 
 	"github.com/MinterTeam/minter-go-node/coreV2/state/bus"
 	"github.com/MinterTeam/minter-go-node/coreV2/state/checker"
@@ -13,6 +14,104 @@ import (
 	"github.com/MinterTeam/minter-go-node/tree"
 	db "github.com/tendermint/tm-db"
 )
+
+func TestPair_LoadOrders_bag13748182(t *testing.T) {
+	memDB := db.NewMemDB()
+	immutableTree, err := tree.NewMutableTree(0, memDB, 1024, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	newBus := bus.NewBus()
+	checker.NewChecker(newBus)
+
+	swap := NewV2(newBus, immutableTree.GetLastImmutable())
+	_, _, _, _ = swap.PairCreate(2065, 2064,
+		helpers.StringToBigInt("542366473137438478"),
+		helpers.StringToBigInt("38231412691458032"))
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	pair := swap.Pair(2065, 2064)
+	t.Log(pair.Price().Text('e', 38))
+
+	order25155 := pair.AddOrder(
+		helpers.StringToBigInt("18570358800052724"),
+		helpers.StringToBigInt("232507309378398939"), types.Address{2}, 13595234) // 25155
+	t.Log(order25155.sortPrice().Text('e', 38))
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	swap = NewV2(newBus, immutableTree.GetLastImmutable())
+	pair = swap.Pair(2065, 2064)
+
+	order25158 := pair.AddOrder(
+		helpers.StringToBigInt("5090677725952858"),
+		helpers.StringToBigInt("72203073908983161"), types.Address{2}, 13595317) // 25158
+	t.Log(order25158.sortPrice().Text('e', 38))
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	swap = NewV2(newBus, immutableTree.GetLastImmutable())
+	pair = swap.Pair(2065, 2064)
+
+	order25235 := pair.AddOrder(
+		helpers.StringToBigInt("4775129032258065"),
+		helpers.StringToBigInt("67741935483870968"), types.Address{1}, 13607725) // 25235
+	t.Log(order25235.sortPrice().Text('e', 38))
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	swap = NewV2(newBus, immutableTree.GetLastImmutable())
+	pair = swap.Pair(2065, 2064)
+
+	order25557 := pair.AddOrder(
+		helpers.StringToBigInt("7717191601281900"),
+		helpers.StringToBigInt("109479239626640638"), types.Address{2}, 13655244) // 25557
+	t.Log(order25557.sortPrice().Text('e', 38))
+
+	t.Log(order25235.sortPrice().Cmp(order25557.sortPrice()))
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	swap = NewV2(newBus, immutableTree.GetLastImmutable())
+	pair = swap.Pair(2065, 2064)
+
+	pair.orderSellByIndex(0)
+	pair.unsortedDirtySellOrders.list[order25557.id] = struct{}{}
+	pair.unsortedDirtyBuyOrders.list[order25557.id] = struct{}{}
+	pair.dirtyOrders.list[order25557.id] = struct{}{}
+
+	_, _, err = immutableTree.Commit(swap)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Logf("%#v", pair.orderSellByIndex(0))
+	//ordersMEM := pair.OrdersSell(5)
+	//for _, limit := range ordersMEM {
+	//	t.Logf("%#v", limit)
+	//}
+
+	swap = NewV2(newBus, immutableTree.GetLastImmutable())
+	pair = swap.Pair(2065, 2064)
+
+	//for _, limit := range pair.OrdersSell(1) {
+	//	t.Logf("%#v", limit)
+	//}
+	t.Logf("%#v", pair.orderSellByIndex(0))
+}
 
 func TestPair_LoadOrders_bagSkip9295610(t *testing.T) {
 	//versionWithoutBug = -1
