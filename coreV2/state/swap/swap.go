@@ -535,7 +535,7 @@ func id2Bytes(id uint32) []byte {
 }
 func id2BytesWithType(id uint32, sale bool) []byte {
 	byteID := make([]byte, 4)
-	if sale {
+	if sale { // todo FIXME: delete
 		id = math.MaxUint32 - id
 	}
 

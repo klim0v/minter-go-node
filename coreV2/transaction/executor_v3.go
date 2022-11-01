@@ -363,12 +363,12 @@ func (e *ExecutorV3) RunTx(context state.Interface, rawTx []byte, rewardPool *bi
 	response.GasWanted = response.GasUsed
 	response.GasPrice = tx.GasPrice
 
-	if currentBlock > 13748180 {
-		fmt.Printf("%#v", response)
-		for _, tag := range response.Tags {
-			fmt.Print(tag.String())
-		}
-	}
+	//if currentBlock > 13748180 {
+	//	fmt.Printf("%#v", response)
+	//	for _, tag := range response.Tags {
+	//		fmt.Print(tag.String())
+	//	}
+	//}
 
 	return response
 }
