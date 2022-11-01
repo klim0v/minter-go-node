@@ -535,7 +535,7 @@ func id2Bytes(id uint32) []byte {
 }
 func id2BytesWithType(id uint32, sale bool) []byte {
 	byteID := make([]byte, 4)
-	if sale { // todo FIXME: delete
+	if sale {
 		id = math.MaxUint32 - id
 	}
 
@@ -543,7 +543,7 @@ func id2BytesWithType(id uint32, sale bool) []byte {
 	return byteID
 }
 
-func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) []byte {
+func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) (k []byte) {
 	var pricePath []byte
 
 	text := price.Text('e', 38)
@@ -593,6 +593,9 @@ func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) []byte {
 	if isSale {
 		saleByte = 1
 	}
+	//defer func() {
+	//	log.Println(k)
+	//}()
 	return append(append(append(append([]byte{mainPrefix}, key.pathOrders()...), saleByte), pricePath...), byteID...)
 }
 

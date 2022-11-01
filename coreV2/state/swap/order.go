@@ -1474,6 +1474,9 @@ func addToList(orders []*Limit, dirtyOrder *Limit, cmp int, index int) (list []*
 		if dirtyOrder.ID() == 266 {
 			log.Println("list", list)
 			for _, limit := range list {
+				if limit == nil {
+					break
+				}
 				log.Println("id", limit.id, "p", limit.sortPrice().String())
 			}
 		}
