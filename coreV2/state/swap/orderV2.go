@@ -1082,12 +1082,6 @@ func (p *PairV2) updateDirtyOrders(list []uint32, lower bool) (orders []uint32, 
 		dirties = append(dirties, dirty)
 	}
 
-	if *p.pairData.ID == 266 {
-		log.Println(dirties)
-		for _, limit := range dirties {
-			log.Println("id", limit.id, "p", limit.sortPrice().String())
-		}
-	}
 	sort.Slice(dirties, func(i, j int) bool {
 		a := dirties[j]
 		b := dirties[i]
@@ -1104,12 +1098,6 @@ func (p *PairV2) updateDirtyOrders(list []uint32, lower bool) (orders []uint32, 
 			return false
 		}
 	})
-	if *p.pairData.ID == 266 {
-		log.Println(dirties)
-		for _, limit := range dirties {
-			log.Println("id", limit.id, "p", limit.sortPrice().String())
-		}
-	}
 
 	var pos int
 	for _, dirty := range dirties {
@@ -1148,15 +1136,6 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 	defer p.deletedSellOrderIDs().mu.Unlock()
 
 	orders := p.sellOrderIDs()
-
-	defer func() {
-		if *p.pairData.ID == 266 {
-			log.Println(p.sellOrderIDs())
-		}
-	}()
-	if *p.pairData.ID == 266 {
-		log.Println(orders)
-	}
 
 	var fromOrder *Limit
 	// если массив не пустой, то пересортировать, если есть грязные!

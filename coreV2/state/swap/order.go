@@ -1470,24 +1470,6 @@ func (p *Pair) updateDirtyOrders(list []uint32, lower bool) (orders []uint32, de
 }
 
 func addToList(orders []*Limit, dirtyOrder *Limit, cmp int, index int) (list []*Limit, included bool, pos int) {
-	defer func() {
-		if dirtyOrder.ID() == 266 {
-			log.Println("list", list)
-			for _, limit := range list {
-				if limit == nil {
-					break
-				}
-				log.Println("id", limit.id, "p", limit.sortPrice().String())
-			}
-		}
-	}()
-	if dirtyOrder.ID() == 266 {
-		log.Println("list", list)
-		for _, limit := range list {
-			log.Println("id", limit.id, "p", limit.sortPrice().String())
-		}
-	}
-
 	var hasZero bool
 
 	var last int
