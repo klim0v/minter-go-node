@@ -532,10 +532,8 @@ func (s *SwapV2) Commit(db *iavl.MutableTree, version int64) error {
 
 			oldSortPrice := limit.OldSortPrice()
 			newPath := pricePath(key, limit.reCalcOldSortPrice(), limit.id, !limit.IsBuy)
-			//log.Println("add", newPath)
 			if oldSortPrice.Sign() != 0 {
 				oldPathOrderList := pricePath(key, oldSortPrice, limit.id, !limit.IsBuy)
-				//log.Println("del", oldPathOrderList)
 				if limit.isEmpty() {
 					db.Remove(pathOrderID)
 					db.Remove(oldPathOrderList)
