@@ -1165,10 +1165,17 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 		if p.hasUnsortedSellOrders() || p.hasDeletedSellOrders() {
 			// пересортируем, что бы лист почистился и пересортировался
 
-			needLoadMore := len(p.deletedSellOrderIDs().list) - len(orders)
+			needLoadMore := len(orders) - len(p.deletedSellOrderIDs().list)
 			if lastI := len(orders) - 1; lastI >= 0 && orders[lastI] != 0 {
 				fromOrder = p.order(orders[lastI])
-				needLoadMore++
+				if !p.isDirtyOrder(fromOrder.id) {
+					needLoadMore++
+				} else {
+					fromOrder = nil
+					needLoadMore += lastI
+					orders = nil
+				}
+
 			}
 
 			if needLoadMore > 0 { // needLoadMore == 0 ignore ok
@@ -1195,7 +1202,6 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 					log.Println("index > lastI", index-lastI)
 					loadedNextOrders := p.loadSellOrders(p, fromOrder, index-lastI)
 					resortedOrders, unsets := p.updateDirtyOrders(append(orders, loadedNextOrders...), true)
-					//resortedOrders, unsets := p.updateDirtyOrders(append(orders, loadedNextOrders...), true)
 					// проверим загружены ли все
 					lastJ := len(resortedOrders) - 1
 					if resortedOrders[lastJ] != 0 {
