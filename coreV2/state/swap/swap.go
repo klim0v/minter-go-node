@@ -593,9 +593,6 @@ func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) (k []byte)
 	if isSale {
 		saleByte = 1
 	}
-	//defer func() {
-	//	log.Println(k)
-	//}()
 	return append(append(append(append([]byte{mainPrefix}, key.pathOrders()...), saleByte), pricePath...), byteID...)
 }
 
