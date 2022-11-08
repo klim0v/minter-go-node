@@ -1086,14 +1086,10 @@ func (p *PairV2) updateDirtyOrders(list []uint32, lower bool) (orders []uint32, 
 		b := dirties[i]
 		switch a.sortPrice().Cmp(b.sortPrice()) {
 		case cmp:
-			log.Println(true)
 			return true
 		case 0:
-			log.Printf("a %#v\n", a)
-			log.Printf("b %#v\n", b)
 			return a.id < b.id
 		default:
-			log.Println(false)
 			return false
 		}
 	})
@@ -1150,7 +1146,7 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 					needLoadMore++
 				} else {
 					fromOrder = nil
-					needLoadMore += lastI
+					needLoadMore += index
 					orders = nil
 				}
 
