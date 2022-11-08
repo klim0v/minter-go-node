@@ -114,13 +114,13 @@ func TestPair_LoadOrders_bag13748182_firstIsDirty(t *testing.T) {
 	//		t.Logf("p: %s id %d", limit.sortPrice().String(), limit.id)
 	//	}
 
-	//pair.setSellOrders([]uint32{order25557.id})
-	//order25557.WantBuy = helpers.StringToBigInt("7717191601281900")
-	//order25557.WantSell = helpers.StringToBigInt("109479239626640638")
-	//t.Log(order25557.id, order25557.sortPrice().Text('e', 38))
-	//pair.unsortedDirtySellOrders.list[order25557.id] = struct{}{}
-	//pair.unsortedDirtyBuyOrders.list[order25557.id] = struct{}{}
-	//pair.dirtyOrders.list[order25557.id] = struct{}{}
+	pair.setSellOrders([]uint32{order25557.id})
+	order25557.WantBuy = helpers.StringToBigInt("7717191601281900")
+	order25557.WantSell = helpers.StringToBigInt("109479239626640638")
+	t.Log(order25557.id, order25557.sortPrice().Text('e', 38))
+	pair.unsortedDirtySellOrders.list[order25557.id] = struct{}{}
+	pair.unsortedDirtyBuyOrders.list[order25557.id] = struct{}{}
+	pair.dirtyOrders.list[order25557.id] = struct{}{}
 
 	t.Log()
 	for _, limit := range pair.OrdersSell(4) {
