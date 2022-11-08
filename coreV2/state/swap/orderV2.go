@@ -910,7 +910,6 @@ func (s *SwapV2) loadBuyOrders(pair *PairV2, fromOrder *Limit, limit int) []uint
 	}
 
 	if fromOrder != nil {
-		log.Println("fromOrder", fromOrder.id)
 		startKey = pricePath(pair.PairKey, fromOrder.OldSortPrice(), fromOrder.id+1, false) // todo: tests OldSortPrice
 	}
 
@@ -1158,7 +1157,6 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 			}
 
 			if needLoadMore > 0 { // needLoadMore == 0 ignore ok
-				log.Println("needLoadMore", needLoadMore)
 				orders = append(orders, p.loadSellOrders(p, fromOrder, needLoadMore)...)
 			}
 
@@ -1178,17 +1176,14 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 					//log.Println("b")
 					// загрузим с последнего нужное количество и отсортируем
 					fromOrder = p.order(orders[lastI])
-					log.Println("index > lastI", index-lastI)
 					loadedNextOrders := p.loadSellOrders(p, fromOrder, index-lastI)
 					resortedOrders, unsets := p.updateDirtyOrders(append(orders, loadedNextOrders...), true)
 					// проверим загружены ли все
 					lastJ := len(resortedOrders) - 1
 					if resortedOrders[lastJ] != 0 {
-						//log.Println("c")
 						// среди них не может быть использованных иначе бы они были загружены ранее,
 						// но могут быть удаленные удаленных, проверим
 						for ; index > lastJ && lastJ >= 0 && resortedOrders[lastJ] != 0 && p.hasDeletedSellOrders() && unsets > 0; lastJ = len(resortedOrders) - 1 {
-							//log.Println("d")
 							fromOrder = p.order(resortedOrders[lastI])
 							loadedNextOrders := p.loadSellOrders(p, fromOrder, index-lastI+unsets)
 							var resortLoadedNextOrders []uint32
@@ -1204,7 +1199,6 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 			lastI := len(orders) - 1
 			// если загружены не все и их не достаточно, то подгрузить
 			if orders[lastI] != 0 && index > lastI {
-				//log.Println("e")
 				fromOrder = p.order(orders[lastI])
 				loadedNextOrders := p.loadSellOrders(p, fromOrder, index-lastI)
 				// тк нет грязных, то просто складываем
