@@ -1142,25 +1142,16 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 			needLoadMore := len(p.deletedSellOrderIDs().list)
 			if lastI := len(orders) - 1; lastI >= 0 && orders[lastI] != 0 {
 				fromOrder = p.order(orders[lastI])
-				if !p.isDirtyOrder(fromOrder.id) {
-					needLoadMore++
-				} else {
+				if p.isDirtyOrder(fromOrder.id) {
 					fromOrder = nil
-					needLoadMore += index + len(p.unsortedSellOrderIDs().list)
+					needLoadMore += index - len(p.unsortedSellOrderIDs().list)
 					orders = nil
 				}
+				needLoadMore++
 			}
 
 			if needLoadMore > 0 {
 				orders = append(orders, p.loadSellOrders(p, fromOrder, needLoadMore)...)
-			}
-
-			orders, needLoadMore = p.updateDirtyOrders(orders, true)
-			if lastI := len(orders) - 1; lastI >= 0 && orders[lastI] != 0 {
-				fromOrder = p.order(orders[lastI])
-				if needLoadMore > 0 {
-					orders = append(orders, p.loadSellOrders(p, fromOrder, needLoadMore)...)
-				}
 			}
 
 			orders, _ = p.updateDirtyOrders(orders, true)
