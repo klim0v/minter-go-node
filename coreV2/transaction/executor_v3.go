@@ -8,12 +8,11 @@ import (
 	"sync"
 
 	"github.com/MinterTeam/minter-go-node/coreV2/check"
-	"github.com/MinterTeam/minter-go-node/coreV2/state/swap"
-	abcTypes "github.com/tendermint/tendermint/abci/types"
-
 	"github.com/MinterTeam/minter-go-node/coreV2/code"
 	"github.com/MinterTeam/minter-go-node/coreV2/state"
+	"github.com/MinterTeam/minter-go-node/coreV2/state/swap"
 	"github.com/MinterTeam/minter-go-node/coreV2/types"
+	abcTypes "github.com/tendermint/tendermint/abci/types"
 )
 
 type ExecutorV3 struct {

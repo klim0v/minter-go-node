@@ -4,12 +4,13 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/MinterTeam/minter-go-node/coreV2/events"
 	"log"
 	"math"
 	"math/big"
 	"sort"
 	"sync"
+
+	"github.com/MinterTeam/minter-go-node/coreV2/events"
 
 	"github.com/MinterTeam/minter-go-node/coreV2/types"
 	"github.com/MinterTeam/minter-go-node/rlp"
@@ -472,10 +473,10 @@ func (p *Pair) CalculateAddAmountsForPrice(price *big.Float) (amount0In, amount1
 }
 
 // calculateAddAmountsForPrice returns a0 and a1 to reach the price
+//
 //		{ (r0 + 0.998a0) * (r1 - a1) = r0 * r1
 //	   {
 //		{ (r0 + a0) / (r1 - a1) = price
-//
 func (p *Pair) calculateAddAmountsForPrice(price *big.Float) (amount0 *big.Int, amount1 *big.Int) {
 	reserve0, reserve1 := p.Reserves()
 	r0 := big.NewFloat(0).SetInt(reserve0)
@@ -1469,7 +1470,6 @@ func (p *Pair) updateDirtyOrders(list []uint32, lower bool) (orders []uint32, de
 }
 
 func addToList(orders []*Limit, dirtyOrder *Limit, cmp int, index int) (list []*Limit, included bool, pos int) {
-
 	var hasZero bool
 
 	var last int
@@ -1502,7 +1502,6 @@ func addToList(orders []*Limit, dirtyOrder *Limit, cmp int, index int) (list []*
 		default:
 			less = false
 		}
-
 		if less {
 			skeeped += cur + 1
 			index = 0

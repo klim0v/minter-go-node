@@ -543,7 +543,7 @@ func id2BytesWithType(id uint32, sale bool) []byte {
 	return byteID
 }
 
-func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) []byte {
+func pricePath(key PairKey, price *big.Float, id uint32, isSale bool) (k []byte) {
 	var pricePath []byte
 
 	text := price.Text('e', 38)
