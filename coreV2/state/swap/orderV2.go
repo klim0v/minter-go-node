@@ -1144,7 +1144,7 @@ func (p *PairV2) orderSellLoadToIndex(index int) *Limit {
 				fromOrder = p.order(orders[lastI])
 				if p.isDirtyOrder(fromOrder.id) {
 					fromOrder = nil
-					needLoadMore += index - len(p.unsortedSellOrderIDs().list)
+					needLoadMore += index + len(p.unsortedSellOrderIDs().list)
 					orders = nil
 				}
 				needLoadMore++
