@@ -42,6 +42,9 @@ func NewCheckState(state *State) *CheckState {
 
 func (cs *CheckState) isValue_State() {}
 
+func (cs *CheckState) ITree() *iavl.ImmutableTree {
+	return cs.state.Tree().GetLastImmutable()
+}
 func (cs *CheckState) Export() types.AppState {
 	appState := new(types.AppState)
 	cs.App().Export(appState)
